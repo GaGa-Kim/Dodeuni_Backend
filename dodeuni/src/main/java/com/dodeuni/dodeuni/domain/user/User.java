@@ -28,4 +28,9 @@ public class User {
         this.email = email;
         this.nickname = nickname;
     }
+
+    public User updateProfile(String newNickname) {
+        this.nickname = newNickname;
+        return this;
+    }
 }

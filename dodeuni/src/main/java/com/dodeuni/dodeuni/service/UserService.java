@@ -1,13 +1,18 @@
 package com.dodeuni.dodeuni.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.dodeuni.dodeuni.domain.user.User;
 import com.dodeuni.dodeuni.domain.user.UserRepository;
 import com.dodeuni.dodeuni.web.dto.user.TokenDto;
 import com.dodeuni.dodeuni.web.dto.user.UserResponseDto;
 import com.dodeuni.dodeuni.web.dto.user.UserSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 @Transactional
@@ -15,6 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    @Value("${jwt.secret}")
+    public String secret;
+
+    @Value("${jwt.expiration_time}")
+    public int expiration_time;
     
     public TokenDto login(UserSaveRequestDto userSaveRequestDto) {
 
@@ -52,9 +63,12 @@ public class UserService {
     }
 
     public TokenDto createToken(User user) {
-        
-        // TODO : 추후 jwt 토큰 생성으로 변경
-        String jwtToken = "jwt 토큰";
+        String jwtToken = JWT.create()
+                .withSubject(user.getEmail())
+                .withExpiresAt(new Date(System.currentTimeMillis()+ expiration_time))
+                .withClaim("id", user.getId())
+                .withClaim("role", "회원")
+                .sign(Algorithm.HMAC512(secret));
 
         return new TokenDto(user.getId(), user.getEmail(), user.getNickname(), jwtToken);
     }

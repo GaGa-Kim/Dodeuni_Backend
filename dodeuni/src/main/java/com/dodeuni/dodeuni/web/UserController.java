@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @PutMapping("/api/user")
-    public ResponseEntity<UserResponseDto> setProfile(@RequestParam Long id, String newNickname) {
+    public ResponseEntity<UserResponseDto> updateNickname(@RequestParam Long id, String newNickname) {
         return ResponseEntity.ok().body(userService.updateNickname(id, newNickname));
     }
 }

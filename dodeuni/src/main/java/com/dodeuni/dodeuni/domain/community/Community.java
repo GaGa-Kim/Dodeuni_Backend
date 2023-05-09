@@ -43,6 +43,14 @@ public class Community extends BaseTime {
         this.content = content;
     }
 
+    public Community update(String main, String sub, String title, String content) {
+        this.main = main;
+        this.sub = sub;
+        this.title = title;
+        this.content = content;
+        return this;
+    }
+
     public void setUser(User user) {
         this.userId = user;
         if(!userId.getCommunityList().contains(this))

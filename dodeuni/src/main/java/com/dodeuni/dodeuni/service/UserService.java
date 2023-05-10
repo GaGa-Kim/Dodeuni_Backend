@@ -41,13 +41,13 @@ public class UserService {
 
     public UserResponseDto getProfile(Long id) {
 
-        User user = findUser(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
         return new UserResponseDto(user);
     }
 
     public UserResponseDto updateNickname(Long id, String newNickname) {
 
-        User user = findUser(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
         user.updateProfile(newNickname);
         return new UserResponseDto(user);
     }
@@ -55,11 +55,6 @@ public class UserService {
    public Boolean validateDuplicatedUser(String email) {
 
         return userRepository.countByEmail(email) > 0;
-    }
-
-    public User findUser(Long id) {
-
-        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
     }
 
     public TokenDto createToken(User user) {

@@ -2,6 +2,8 @@ package com.dodeuni.dodeuni.service;
 
 import com.dodeuni.dodeuni.domain.community.Community;
 import com.dodeuni.dodeuni.domain.community.CommunityRepository;
+import com.dodeuni.dodeuni.domain.community.Photo;
+import com.dodeuni.dodeuni.domain.community.PhotoRepository;
 import com.dodeuni.dodeuni.domain.user.User;
 import com.dodeuni.dodeuni.domain.user.UserRepository;
 import com.dodeuni.dodeuni.web.dto.community.CommunityListResponseDto;
@@ -11,6 +13,8 @@ import com.dodeuni.dodeuni.web.dto.community.CommunityUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,33 +26,41 @@ public class CommunityService {
 
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
+    private final AwsS3Service awsS3Service;
+    private final PhotoRepository photoRepository;
 
     public CommunityResponseDto save(CommunitySaveRequestDto communitySaveRequestDto) {
 
-        User user = findUser(communitySaveRequestDto.getUserId());
+        User user = userRepository.findById(communitySaveRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
         Community community = communitySaveRequestDto.toEntity();
         community.setUser(user);
         user.addCommunityList(communityRepository.save(community));
 
-        return new CommunityResponseDto(community);
+        if(communitySaveRequestDto.getPhoto() != null) {
+            addPhoto(community, communitySaveRequestDto.getPhoto());
+        }
+
+        List<Photo> photoList = photoRepository.findAllByCommunityId(community);
+        return new CommunityResponseDto(community, getPhotoId(photoList), getPhotoUrl(photoList));
     }
 
     public List<CommunityListResponseDto> getList(String main, String sub) {
 
         List<Community> communityList = communityRepository.findByMainAndSub(main, sub);
-        return communityList.stream().map(community -> new CommunityListResponseDto(community)).collect(Collectors.toList());
+        return communityList.stream().map(CommunityListResponseDto::new).collect(Collectors.toList());
     }
 
     public CommunityResponseDto getDetail(Long id) {
 
-        Community community = findCommunity(id);
-        return new CommunityResponseDto(community);
+        Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        List<Photo> photoList = photoRepository.findAllByCommunityId(community);
+        return new CommunityResponseDto(community, getPhotoId(photoList), getPhotoUrl(photoList));
     }
 
     public CommunityResponseDto update(CommunityUpdateRequestDto communityUpdateRequestDto) {
 
-        User user = findUser(communityUpdateRequestDto.getUserId());
-        Community community = findCommunity(communityUpdateRequestDto.getId());
+        User user = userRepository.findById(communityUpdateRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
+        Community community = communityRepository.findById(communityUpdateRequestDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
 
         if(user.equals(community.getUserId())) {
             community.update(communityUpdateRequestDto.getMain(),
@@ -56,7 +68,12 @@ public class CommunityService {
                              communityUpdateRequestDto.getTitle(),
                              communityUpdateRequestDto.getContent());
 
-            return new CommunityResponseDto(community);
+            if(!CollectionUtils.isEmpty(communityUpdateRequestDto.getAddPhoto())) {
+                addPhoto(community, communityUpdateRequestDto.getAddPhoto());
+            }
+
+            List<Photo> photoList = photoRepository.findAllByCommunityId(community);
+            return new CommunityResponseDto(community, getPhotoId(photoList), getPhotoUrl(photoList));
         }
 
         else {
@@ -66,10 +83,12 @@ public class CommunityService {
 
     public void delete(Long userId, Long id) {
 
-        User user = findUser(userId);
-        Community community = findCommunity(id);
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
+        Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        List<Photo> photoList = photoRepository.findAllByCommunityId(community);
 
         if(user.equals(community.getUserId())) {
+            deletePhoto(getPhotoId(photoList));
             communityRepository.delete(community);
         }
 
@@ -78,13 +97,32 @@ public class CommunityService {
         }
     }
 
-    public User findUser(Long userId) {
+    public void addPhoto(Community community, List<MultipartFile> photos) {
 
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
+        List<Photo> photoList = awsS3Service.uploadPhoto(photos);
+        if(!photoList.isEmpty()) {
+            for(Photo photo: photoList) {
+                community.addPhotoList(photoRepository.save(photo));
+            }
+        }
     }
 
-    public Community findCommunity(Long communityId) {
+    public void deletePhoto(List<Long> deletePhotoId) {
 
-        return communityRepository.findById(communityId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        for(Long deleteId: deletePhotoId) {
+            Photo photo = photoRepository.findById(deleteId).orElseThrow(() -> new IllegalArgumentException("해당 사진이 없습니다."));
+            awsS3Service.deleteS3(photo.getPhotoName());
+            photoRepository.delete(photo);
+        }
+    }
+
+    public List<Long> getPhotoId(List<Photo> photoList) {
+
+        return photoList.stream().map(Photo::getId).collect(Collectors.toList());
+    }
+
+    public List<String> getPhotoUrl(List<Photo> photoList) {
+
+        return photoList.stream().map(Photo::getPhotoUrl).collect(Collectors.toList());
     }
 }

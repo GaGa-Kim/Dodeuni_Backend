@@ -4,7 +4,7 @@ import com.dodeuni.dodeuni.domain.community.Community;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 
 @Getter
 public class CommunityResponseDto {
@@ -27,9 +27,11 @@ public class CommunityResponseDto {
 
     private String content;
 
-    // TODO : 사진 아이디, 사진 url 추가
+    private List<Long> photoId;
 
-    public CommunityResponseDto(Community community) {
+    private List<String> photoUrl;
+
+    public CommunityResponseDto(Community community, List<Long> photoId, List<String> photoUrl) {
         this.id = community.getId();
         this.createdDateTime = community.getCreatedDateTime();
         this.userId = community.getUserId().getId();
@@ -39,5 +41,7 @@ public class CommunityResponseDto {
         this.sub = community.getSub();
         this.title = community.getTitle();
         this.content = community.getContent();
+        this.photoId = photoId;
+        this.photoUrl = photoUrl;
     }
 }

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,15 +24,16 @@ public class CommunitySaveRequestDto {
 
     private String content;
 
-    // TODO : 사진 추가
+    private List<MultipartFile> photo;
 
     @Builder
-    public CommunitySaveRequestDto(Long userId, String main, String sub, String title, String content) {
+    public CommunitySaveRequestDto(Long userId, String main, String sub, String title, String content, List<MultipartFile> photo) {
         this.userId = userId;
         this.main = main;
         this.sub = sub;
         this.title = title;
         this.content = content;
+        this.photo = photo;
     }
 
     public Community toEntity() {

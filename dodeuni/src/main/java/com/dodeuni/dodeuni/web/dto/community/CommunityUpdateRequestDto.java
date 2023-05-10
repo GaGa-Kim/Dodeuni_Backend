@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,16 +24,20 @@ public class CommunityUpdateRequestDto {
     private String title;
 
     private String content;
-    
-    // TODO : 추가할 사진, 삭제할 사진 추가
+
+    private List<MultipartFile> addPhoto;
+
+    private List<Long> deletePhotoId;
 
     @Builder
-    public CommunityUpdateRequestDto(Long id, Long userId, String main, String sub, String title, String content) {
+    public CommunityUpdateRequestDto(Long id, Long userId, String main, String sub, String title, String content, List<MultipartFile> addPhoto, List<Long> deletePhotoId) {
         this.id = id;
         this.userId = userId;
         this.main = main;
         this.sub = sub;
         this.title = title;
         this.content = content;
+        this.addPhoto = addPhoto;
+        this.deletePhotoId = deletePhotoId;
     }
 }

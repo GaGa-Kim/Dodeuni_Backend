@@ -36,6 +36,7 @@ public class CommunityController {
 
     @PutMapping("/api/community")
     public ResponseEntity<CommunityResponseDto> update(@ModelAttribute CommunityUpdateRequestDto communityUpdateRequestDto) {
+        communityService.deletePhoto(communityUpdateRequestDto.getDeletePhotoId());
         return ResponseEntity.ok().body(communityService.update(communityUpdateRequestDto));
     }
 

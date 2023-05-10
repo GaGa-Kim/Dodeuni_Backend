@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class Photo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Photo_Id")
     private Long id;
 
@@ -29,8 +30,7 @@ public class Photo {
     private String photoUrl;
 
     @Builder
-    public Photo(Long id, String origPhotoName, String photoName, String photoUrl) {
-        this.id = id;
+    public Photo(String origPhotoName, String photoName, String photoUrl) {
         this.origPhotoName = origPhotoName;
         this.photoName = photoName;
         this.photoUrl = photoUrl;

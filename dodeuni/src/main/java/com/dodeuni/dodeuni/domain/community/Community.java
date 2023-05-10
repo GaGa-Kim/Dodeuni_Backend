@@ -37,6 +37,9 @@ public class Community extends BaseTime {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @OneToMany(mappedBy = "communityId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Photo> photoList = new ArrayList<>();
+
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
@@ -49,12 +52,27 @@ public class Community extends BaseTime {
         this.content = content;
     }
 
+    public Community update(String main, String sub, String title, String content) {
+        this.main = main;
+        this.sub = sub;
+        this.title = title;
+        this.content = content;
+        return this;
+    }
+
     public void setUser(User user) {
         this.userId = user;
         if(!userId.getCommunityList().contains(this))
             user.getCommunityList().add(this);
     }
 
+    public void addPhotoList(Photo photo) {
+        this.photoList.add(photo);
+        if(photo.getCommunityId() != this) {
+            photo.setCommunity(this);
+        }
+    }
+  
     public void addCommentList(Comment comment){
         this.commentList.add(comment);
         if(comment.getCommunity() != this){

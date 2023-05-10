@@ -1,10 +1,12 @@
 package com.dodeuni.dodeuni.web.dto.community;
 
 import com.dodeuni.dodeuni.domain.community.Community;
+import com.dodeuni.dodeuni.domain.community.Photo;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class CommunityResponseDto {
@@ -31,7 +33,7 @@ public class CommunityResponseDto {
 
     private List<String> photoUrl;
 
-    public CommunityResponseDto(Community community, List<Long> photoId, List<String> photoUrl) {
+    public CommunityResponseDto(Community community) {
         this.id = community.getId();
         this.createdDateTime = community.getCreatedDateTime();
         this.userId = community.getUserId().getId();
@@ -41,7 +43,13 @@ public class CommunityResponseDto {
         this.sub = community.getSub();
         this.title = community.getTitle();
         this.content = community.getContent();
-        this.photoId = photoId;
-        this.photoUrl = photoUrl;
+        if (!community.getPhotoList().isEmpty()) {
+            this.photoId = community.getPhotoList().stream().map(Photo::getId).collect(Collectors.toList());
+            this.photoUrl = community.getPhotoList().stream().map(Photo::getPhotoUrl).collect(Collectors.toList());
+        }
+        else {
+            this.photoId = null;
+            this.photoUrl = null;
+        }
     }
 }

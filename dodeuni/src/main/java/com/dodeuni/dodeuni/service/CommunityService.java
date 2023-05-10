@@ -40,8 +40,7 @@ public class CommunityService {
             addPhoto(community, communitySaveRequestDto.getPhoto());
         }
 
-        List<Photo> photoList = photoRepository.findAllByCommunityId(community);
-        return new CommunityResponseDto(community, getPhotoId(photoList), getPhotoUrl(photoList));
+        return new CommunityResponseDto(community);
     }
 
     public List<CommunityListResponseDto> getList(String main, String sub) {
@@ -53,8 +52,7 @@ public class CommunityService {
     public CommunityResponseDto getDetail(Long id) {
 
         Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        List<Photo> photoList = photoRepository.findAllByCommunityId(community);
-        return new CommunityResponseDto(community, getPhotoId(photoList), getPhotoUrl(photoList));
+        return new CommunityResponseDto(community);
     }
 
     public CommunityResponseDto update(CommunityUpdateRequestDto communityUpdateRequestDto) {
@@ -72,8 +70,7 @@ public class CommunityService {
                 addPhoto(community, communityUpdateRequestDto.getAddPhoto());
             }
 
-            List<Photo> photoList = photoRepository.findAllByCommunityId(community);
-            return new CommunityResponseDto(community, getPhotoId(photoList), getPhotoUrl(photoList));
+            return new CommunityResponseDto(community);
         }
 
         else {
@@ -88,7 +85,7 @@ public class CommunityService {
         List<Photo> photoList = photoRepository.findAllByCommunityId(community);
 
         if(user.equals(community.getUserId())) {
-            deletePhoto(getPhotoId(photoList));
+            deletePhoto(photoList.stream().map(Photo::getId).collect(Collectors.toList()));
             communityRepository.delete(community);
         }
 
@@ -114,15 +111,5 @@ public class CommunityService {
             awsS3Service.deleteS3(photo.getPhotoName());
             photoRepository.delete(photo);
         }
-    }
-
-    public List<Long> getPhotoId(List<Photo> photoList) {
-
-        return photoList.stream().map(Photo::getId).collect(Collectors.toList());
-    }
-
-    public List<String> getPhotoUrl(List<Photo> photoList) {
-
-        return photoList.stream().map(Photo::getPhotoUrl).collect(Collectors.toList());
     }
 }

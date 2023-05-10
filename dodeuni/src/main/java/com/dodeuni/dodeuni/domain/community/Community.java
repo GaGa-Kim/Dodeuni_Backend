@@ -1,6 +1,7 @@
 package com.dodeuni.dodeuni.domain.community;
 
 import com.dodeuni.dodeuni.domain.BaseTime;
+import com.dodeuni.dodeuni.domain.comment.Comment;
 import com.dodeuni.dodeuni.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +40,9 @@ public class Community extends BaseTime {
     @OneToMany(mappedBy = "communityId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photoList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
+
     @Builder
     public Community(Long id, String main, String sub, String title, String content) {
         this.id = id;
@@ -66,6 +70,13 @@ public class Community extends BaseTime {
         this.photoList.add(photo);
         if(photo.getCommunityId() != this) {
             photo.setCommunity(this);
+        }
+    }
+  
+    public void addCommentList(Comment comment){
+        this.commentList.add(comment);
+        if(comment.getCommunity() != this){
+            comment.setCommunity(this);
         }
     }
 }

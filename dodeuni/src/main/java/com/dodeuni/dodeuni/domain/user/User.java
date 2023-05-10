@@ -1,5 +1,6 @@
 package com.dodeuni.dodeuni.domain.user;
 
+import com.dodeuni.dodeuni.domain.comment.Comment;
 import com.dodeuni.dodeuni.domain.community.Community;
 import com.dodeuni.dodeuni.domain.hyu.Hyu;
 import lombok.Builder;
@@ -32,6 +33,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hyu> hyuList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
+
     @Builder
     public User(Long id, String email, String nickname) {
         this.id = id;
@@ -55,6 +59,13 @@ public class User {
         this.hyuList.add(hyu);
         if(hyu.getUser() != this){
             hyu.setUser(this);
+        }
+    }
+
+    public void addCommentList(Comment comment){
+        this.commentList.add(comment);
+        if(comment.getUser() != this){
+            comment.setUser(this);
         }
     }
 }

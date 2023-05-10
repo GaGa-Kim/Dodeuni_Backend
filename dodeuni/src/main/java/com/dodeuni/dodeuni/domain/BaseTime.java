@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
@@ -15,8 +15,8 @@ import java.util.Date;
 public class BaseTime {
 
     @CreatedDate
-    private Date createdDateTime;
+    private LocalDateTime createdDateTime;
 
     @LastModifiedDate
-    private Date modifiedDateTime;
+    private LocalDateTime modifiedDateTime;
 }

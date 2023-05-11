@@ -2,7 +2,6 @@ package com.dodeuni.dodeuni.service;
 
 import com.dodeuni.dodeuni.domain.comment.Comment;
 import com.dodeuni.dodeuni.domain.comment.CommentRepository;
-import com.dodeuni.dodeuni.domain.community.Community;
 import com.dodeuni.dodeuni.domain.community.CommunityRepository;
 import com.dodeuni.dodeuni.domain.user.User;
 import com.dodeuni.dodeuni.domain.user.UserRepository;
@@ -35,6 +34,12 @@ public class AlarmService {
 
         Collections.sort(commentList, new TimeComparator());
         return commentList.stream().map(AlarmResponseDto::new).collect(Collectors.toList());
+    }
+
+    public void getFcmToken(Long userId, String fcmToken) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
+        user.updateFcmToken(fcmToken);
     }
 
     static class TimeComparator implements Comparator<Comment> {

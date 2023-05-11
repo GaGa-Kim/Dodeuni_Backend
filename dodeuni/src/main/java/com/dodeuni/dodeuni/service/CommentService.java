@@ -9,23 +9,27 @@ import com.dodeuni.dodeuni.domain.user.UserRepository;
 import com.dodeuni.dodeuni.web.dto.comment.CommentResponseDto;
 import com.dodeuni.dodeuni.web.dto.comment.CommentSaveRequestDto;
 import com.dodeuni.dodeuni.web.dto.comment.CommentUpdateRequestDto;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CommentService {
     private final UserRepository userRepository;
     private final CommunityRepository communityRepository;
     private final CommentRepository commentRepository;
+    private final FcmService fcmService;
 
     /* 댓글 등록 */
     @Transactional
-    public List<CommentResponseDto> saveComment(CommentSaveRequestDto requestDto){
+    public List<CommentResponseDto> saveComment(CommentSaveRequestDto requestDto) {
         Community community = communityRepository.findById(requestDto.getCid())
                 .orElseThrow(IllegalArgumentException::new);
 
@@ -37,12 +41,20 @@ public class CommentService {
         comment.setUser(user);
         commentRepository.save(comment);
 
-        return commentRepository.findAllByCommunityOrderByCreatedDateTimeAsc(community)
-                .stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
+        // 게시글 댓글 알림
+        try {
+            sendAlarm(community, user);
+        } catch (FirebaseMessagingException e) {
+            log.info(e.getMessage());
+        } finally {
 
+            return commentRepository.findAllByCommunityOrderByCreatedDateTimeAsc(community)
+                    .stream()
+                    .map(CommentResponseDto::new)
+                    .collect(Collectors.toList());
+        }
     }
+
     /* 댓글 리스트 조회 */
     @Transactional(readOnly = true)
     public List<CommentResponseDto> getCommentList(Long cid){
@@ -87,4 +99,12 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    /* 게시글 댓글 알림 */
+    @Transactional
+    public void sendAlarm(Community community, User user) throws FirebaseMessagingException {
+
+        fcmService.sendMessage(community.getUserId().getFcmToken(), user.getNickname()+"님이 회원님의 게시글에 댓글을 달았습니다.", community.getId());
+        System.out.println("게시글 작성자: "+community.getUserId().getNickname());
+        System.out.println(user.getNickname()+"님이 회원님의 게시글에 댓글을 달았습니다.");
+    }
 }

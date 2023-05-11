@@ -27,6 +27,9 @@ public class User {
     @Column(length = 100, nullable = false)
     private String nickname;
 
+    @Column(length = 100)
+    private String fcmToken;
+
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Community> communityList = new ArrayList<>();
 
@@ -45,6 +48,11 @@ public class User {
 
     public User updateProfile(String newNickname) {
         this.nickname = newNickname;
+        return this;
+    }
+
+    public User updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
         return this;
     }
 

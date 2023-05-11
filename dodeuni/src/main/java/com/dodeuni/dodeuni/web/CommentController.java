@@ -4,6 +4,7 @@ import com.dodeuni.dodeuni.service.CommentService;
 import com.dodeuni.dodeuni.web.dto.comment.CommentResponseDto;
 import com.dodeuni.dodeuni.web.dto.comment.CommentSaveRequestDto;
 import com.dodeuni.dodeuni.web.dto.comment.CommentUpdateRequestDto;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class CommentController {
 
     /* 댓글 등록 */
     @PostMapping("/api/comments")
-    public List<CommentResponseDto> saveComment(@RequestBody CommentSaveRequestDto requestDto){
+    public List<CommentResponseDto> saveComment(@RequestBody CommentSaveRequestDto requestDto) throws FirebaseMessagingException {
         return commentService.saveComment(requestDto);
     }
 

@@ -46,8 +46,8 @@ public class HyuService {
     }
 
     /* 휴 글 전체 삭제 */
-    //@Scheduled(cron = "0 0 24 * * ?")
-    @Scheduled(cron = "0 44 23 * * ?")
+    @Scheduled(cron = "0 0 24 * * ?")
+    //@Scheduled(cron = "0 44 23 * * ?")
     public void deleteHyuAll(){
         hyuRepository.truncateHyuTable();
     }

@@ -3,6 +3,8 @@ package com.dodeuni.dodeuni.domain.user;
 import com.dodeuni.dodeuni.domain.comment.Comment;
 import com.dodeuni.dodeuni.domain.community.Community;
 import com.dodeuni.dodeuni.domain.hyu.Hyu;
+import com.dodeuni.dodeuni.domain.place.Place;
+import com.dodeuni.dodeuni.domain.place.PlaceReview;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Place> placeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PlaceReview> placeReviewList = new ArrayList<>();
 
     @Builder
     public User(Long id, String email, String nickname) {

@@ -18,7 +18,6 @@ public class PlaceResponseDto {
     private String contact;
     private double x;
     private double y;
-    private double distance;
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
 

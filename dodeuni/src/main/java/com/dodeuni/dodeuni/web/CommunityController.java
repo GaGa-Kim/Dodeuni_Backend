@@ -8,6 +8,7 @@ import com.dodeuni.dodeuni.web.dto.community.CommunityUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +37,9 @@ public class CommunityController {
 
     @PutMapping("/api/community")
     public ResponseEntity<CommunityResponseDto> update(@ModelAttribute CommunityUpdateRequestDto communityUpdateRequestDto) {
-        communityService.deletePhoto(communityUpdateRequestDto.getDeletePhotoId());
+        if (!CollectionUtils.isEmpty(communityUpdateRequestDto.getDeletePhotoId())) {
+            communityService.deletePhoto(communityUpdateRequestDto.getDeletePhotoId());
+        }
         return ResponseEntity.ok().body(communityService.update(communityUpdateRequestDto));
     }
 

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class PlaceResponseDto {
     private Long id;
     private String name;
+    private String category;
     private String address;
     private String contact;
     private double x;
@@ -29,6 +30,7 @@ public class PlaceResponseDto {
     public PlaceResponseDto(Place place){
         this.id=place.getId();
         this.name=place.getName();
+        this.category= place.getCategory();
         this.address=place.getAddress();
         this.contact=place.getContact();
         this.x=place.getX();

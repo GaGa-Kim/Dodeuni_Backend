@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class PlaceListResponseDto {
     private Long id;
     private String name;
+    private String category;
     private String address;
     private String contact;
     private double x;
@@ -21,12 +22,13 @@ public class PlaceListResponseDto {
     private Long uid;
     private String nickname;
 
-    public PlaceListResponseDto(Long id, String name, String address, String contact,
+    public PlaceListResponseDto(Long id, String name, String category, String address, String contact,
                                 double x, double y,
                                 LocalDateTime createdDateTime, LocalDateTime modifiedDateTime,
                                 Long uid, String nickname, double distance){
         this.id=id;
         this.name=name;
+        this.category=category;
         this.address=address;
         this.contact=contact;
         this.x=x;

@@ -23,6 +23,9 @@ public class Place extends BaseTime {
     private String name;
 
     @Column(nullable = false)
+    private String category;
+
+    @Column(nullable = false)
     private String address;
 
     private String contact;
@@ -41,9 +44,10 @@ public class Place extends BaseTime {
     private List<PlaceReview> placeReviewList = new ArrayList<>();
 
     @Builder
-    public Place(String name, String address, String contact,
+    public Place(String name, String category, String address, String contact,
                  double x, double y){
         this.name=name;
+        this.category=category;
         this.address=address;
         this.contact=contact;
         this.x=x;

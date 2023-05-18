@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PlaceRepository extends JpaRepository<Place, Long> {
-    @Query("select new com.dodeuni.dodeuni.web.dto.place.PlaceListResponseDto(p.id, p.name, p.address, p.contact," +
+    @Query("select new com.dodeuni.dodeuni.web.dto.place.PlaceListResponseDto(p.id, p.name, p.category, p.address, p.contact," +
             "p.x, p.y, p.createdDateTime, p.modifiedDateTime, u.id, u.nickname," +
             "(6371 * acos(cos(radians(:y)) * cos(radians(p.y)) * cos(radians(p.x) - radians(:x))" +
             "+ sin(radians(:y)) * sin(radians(p.y)))) as distance) " +

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlaceSaveRequestDto {
     private String name;
+    private String category;
     private String address;
     private String contact;
     private double x;
@@ -16,9 +17,10 @@ public class PlaceSaveRequestDto {
     private Long uid;
 
     @Builder
-    public PlaceSaveRequestDto(String name, String address, String contact,
+    public PlaceSaveRequestDto(String name, String category, String address, String contact,
                                double x, double y, Long uid){
         this.name=name;
+        this.category=category;
         this.address=address;
         this.contact=contact;
         this.x=x;
@@ -29,6 +31,7 @@ public class PlaceSaveRequestDto {
     public Place toEntity(){
         return Place.builder()
                 .name(name)
+                .category(category)
                 .address(address)
                 .contact(contact)
                 .x(x)

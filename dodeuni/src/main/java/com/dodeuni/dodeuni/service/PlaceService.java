@@ -6,7 +6,6 @@ import com.dodeuni.dodeuni.domain.place.PlaceReview;
 import com.dodeuni.dodeuni.domain.place.PlaceReviewRepository;
 import com.dodeuni.dodeuni.domain.user.User;
 import com.dodeuni.dodeuni.domain.user.UserRepository;
-import com.dodeuni.dodeuni.web.dto.comment.CommentResponseDto;
 import com.dodeuni.dodeuni.web.dto.place.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor

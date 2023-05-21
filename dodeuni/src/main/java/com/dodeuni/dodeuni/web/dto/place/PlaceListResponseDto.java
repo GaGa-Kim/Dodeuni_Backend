@@ -22,10 +22,12 @@ public class PlaceListResponseDto {
     private Long uid;
     private String nickname;
 
+    private Long reviewsCount;
+
     public PlaceListResponseDto(Long id, String name, String category, String address, String contact,
                                 double x, double y,
                                 LocalDateTime createdDateTime, LocalDateTime modifiedDateTime,
-                                Long uid, String nickname, double distance){
+                                Long uid, String nickname, double distance, Long reviewsCount){
         this.id=id;
         this.name=name;
         this.category=category;
@@ -38,6 +40,6 @@ public class PlaceListResponseDto {
         this.modifiedDateTime=modifiedDateTime;
         this.uid=uid;
         this.nickname=nickname;
-
+        this.reviewsCount=reviewsCount;
     }
 }

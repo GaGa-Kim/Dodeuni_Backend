@@ -25,13 +25,21 @@ public class PlaceService {
     /* 추천 장소 등록 */
     @Transactional
     public PlaceResponseDto savePlace(PlaceSaveRequestDto requestDto){
-        User user = userRepository.findById(requestDto.getUid())
-                .orElseThrow(IllegalArgumentException::new);
 
-        Place place = requestDto.toEntity();
-        place.setUser(user);
-        placeRepository.save(place);
-        return new PlaceResponseDto(place);
+        Place place = placeRepository.findByNameAndAddressAndXAndY(
+                requestDto.getName(), requestDto.getAddress(), requestDto.getX(), requestDto.getY());
+
+        if (place!=null){ // 기존에 등록된 장소면 해당 장소의 데이터 리턴
+            return new PlaceResponseDto(place);
+        }else{ // 새로 추가되는 장소면 db에 해당 장소 데이터 저장
+            User user = userRepository.findById(requestDto.getUid())
+                    .orElseThrow(IllegalArgumentException::new);
+
+            Place newPlace = requestDto.toEntity();
+            newPlace.setUser(user);
+            placeRepository.save(newPlace);
+            return new PlaceResponseDto(newPlace);
+        }
     }
 
     /* 추천 장소 리스트 조회 */

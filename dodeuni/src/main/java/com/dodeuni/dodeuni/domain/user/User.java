@@ -27,7 +27,6 @@ public class User {
     @Column(length = 100, nullable = false)
     private String nickname;
 
-    @Column(length = 100)
     private String fcmToken;
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)

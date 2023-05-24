@@ -12,7 +12,7 @@
 **로컬 환경**
 
 ```bash
-1. 보안을 위해 변경해둔, 리소스 파일 변경 필수 (build.gradle, application.properties, dodeuni-firebase-adminsdk-2d8eu-87c0a9bcfb.json)
+1. 보안을 위해 변경해둔, 리소스 파일 변경 필수 (build.gradle, application.properties, dodeuni-firebase-adminsdk-2d8eu-87c0a9bcfb.json 문의)
 2. DodeuniApplication.java 실행
 ```
 <br/>

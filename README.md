@@ -30,7 +30,7 @@
 <br/><br/>
 
 ## 🎞 시연 영상
-[![IPS  도드니 발표자료_page-0017](https://github.com/Dodeuni/Dodeuni_Backend/assets/87821678/fcc894d9-bda9-442c-af55-4513ff4a1273)](https://youtu.be/v_dkXI31GOw)
+[도드니 시연 영상](https://youtu.be/v_dkXI31GOw)
 <br/><br/>
 
 ## 👩🏻‍💻 도드니 팀 백엔드 개발자 

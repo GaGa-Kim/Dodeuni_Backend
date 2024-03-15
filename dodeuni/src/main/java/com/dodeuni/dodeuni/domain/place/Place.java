@@ -2,13 +2,24 @@ package com.dodeuni.dodeuni.domain.place;
 
 import com.dodeuni.dodeuni.domain.BaseTime;
 import com.dodeuni.dodeuni.domain.user.User;
+import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,47 +27,59 @@ import java.util.List;
 public class Place extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="PlaceId")
+    @Column(name = "PlaceId")
+    @ApiModelProperty(notes = "추천 장소 아이디", dataType = "Long", example = "1")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UserId")
+    @ApiModelProperty(notes = "추천 장소 등록 회원", dataType = "User")
+    private User user;
+
     @Column(nullable = false)
+    @ApiModelProperty(notes = "추천 장소 이름", dataType = "String", example = "이름")
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String category;
+    @ApiModelProperty(notes = "추천 장소 카테고리", dataType = "Category", example = "사용자 추천")
+    private Category category;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "추천 장소 주소", dataType = "String", example = "주소")
     private String address;
 
+    @ApiModelProperty(notes = "추천 장소 연락처", dataType = "String", example = "연락처")
     private String contact;
 
     @Column(nullable = false)
-    private double x;           // 경도
+    @ApiModelProperty(notes = "추천 장소 경도", dataType = "double", example = "126.96471647833378")
+    private double x;
 
     @Column(nullable = false)
-    private double y;           // 위도
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "User_Id")
-    private User user;
+    @ApiModelProperty(notes = "추천 장소 위도", dataType = "double", example = "37.54710883987478")
+    private double y;
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PlaceReview> placeReviewList = new ArrayList<>();
+    @ApiModelProperty(notes = "추천 장소 후기 목록", dataType = "List<PlaceReview>")
+    private final List<PlaceReview> placeReviewList = new ArrayList<>();
 
     @Builder
-    public Place(String name, String category, String address, String contact,
-                 double x, double y){
-        this.name=name;
-        this.category=category;
-        this.address=address;
-        this.contact=contact;
-        this.x=x;
-        this.y=y;
+    public Place(Long id, String name, String category, String address, String contact,
+                 double x, double y) {
+        this.id = id;
+        this.name = name;
+        this.category = Category.findCategoryName(category);
+        this.address = address;
+        this.contact = contact;
+        this.x = x;
+        this.y = y;
     }
 
     public void setUser(User user) {
         this.user = user;
-        if(!user.getPlaceList().contains(this))
+        if (!user.getPlaceList().contains(this)) {
             user.getPlaceList().add(this);
+        }
     }
 }

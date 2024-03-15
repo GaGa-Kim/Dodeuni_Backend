@@ -1,55 +1,53 @@
 package com.dodeuni.dodeuni.web;
 
-import com.dodeuni.dodeuni.service.PlaceService;
-import com.dodeuni.dodeuni.web.dto.place.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
+import com.dodeuni.dodeuni.service.place.PlaceService;
+import com.dodeuni.dodeuni.web.dto.place.PlaceInquiryDto;
+import com.dodeuni.dodeuni.web.dto.place.PlaceListResponseDto;
+import com.dodeuni.dodeuni.web.dto.place.PlaceResponseDto;
+import com.dodeuni.dodeuni.web.dto.place.PlaceSaveRequestDto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
+@Api(tags = {"Place API (추천 장소 API)"})
 @RestController
+@Validated
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api/places")
 public class PlaceController {
-
     private final PlaceService placeService;
 
-    /* 추천 장소 등록 */
-    @PostMapping("/api/places")
-    public PlaceResponseDto savePlace(@RequestBody PlaceSaveRequestDto requestDto){
-        return placeService.savePlace(requestDto);
+    @PostMapping
+    @ApiOperation(notes = "추천 장소를 저장", value = "추천 장소 저장 API")
+    public ResponseEntity<PlaceResponseDto> save(@RequestBody @Valid PlaceSaveRequestDto requestDto) {
+        return ResponseEntity.ok().body(placeService.savePlace(requestDto));
     }
 
-    /* 추천 장소 리스트 조회 */
-    @PostMapping("/api/places/list")
-    public List<PlaceListResponseDto> getPlaceList(@RequestBody PlaceInquiryDto placeInquiryDto){
-        return placeService.getPlaceList(placeInquiryDto);
+    @PostMapping("/list")
+    @ApiOperation(notes = "추천 장소 목록을 조회", value = "추천 장소 목록 조회 API")
+    @ApiImplicitParam(name = "placeInquiryDto", value = "추천 장소 질의 정보를 담은 DTO")
+    public ResponseEntity<List<PlaceListResponseDto>> list(@RequestBody @Valid PlaceInquiryDto placeInquiryDto) {
+        return ResponseEntity.ok().body(placeService.getPlaceList(placeInquiryDto));
     }
 
-    /* 추천 장소 상세 조회 */
-    @GetMapping("/api/places/{id}")
-    public PlaceResponseDto findById(@PathVariable("id") Long id)throws Exception{
-        return placeService.findById(id);
+    @GetMapping("/{placeId}")
+    @ApiOperation(notes = "추천 장소를 상세 조회", value = "추천 장소 상세 조회 API")
+    @ApiImplicitParam(name = "placeId", value = "추천 장소 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<PlaceResponseDto> view(@PathVariable @NotNull Long placeId) {
+        return ResponseEntity.ok().body(placeService.getPlace(placeId));
     }
-
-    /* 리뷰 등록 */
-    @PostMapping("/api/places/reviews")
-    public PlaceReviewResponseDto saveReview(@RequestBody PlaceReviewSaveRequestDto requestDto){
-        return placeService.saveReview(requestDto);
-    }
-
-    /* 리뷰 상세 조회 */
-    @GetMapping("/api/places/reviews/{id}")
-    public PlaceReviewResponseDto reviewFindById(@PathVariable("id") Long id)throws Exception{
-        return placeService.reviewFindById(id);
-    }
-
-    /* 리뷰 삭제 */
-    @DeleteMapping("/api/places/reviews/{id}/{pid}")
-    public PlaceResponseDto deleteReview(
-            @PathVariable("id") Long id,
-            @PathVariable("pid") Long pid
-    ){
-        return placeService.deleteReview(id, pid);
-    }
-
 }

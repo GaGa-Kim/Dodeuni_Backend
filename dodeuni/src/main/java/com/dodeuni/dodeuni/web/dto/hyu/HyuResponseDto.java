@@ -1,27 +1,28 @@
 package com.dodeuni.dodeuni.web.dto.hyu;
 
 import com.dodeuni.dodeuni.domain.hyu.Hyu;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
-import java.util.Date;
+import lombok.Getter;
 
 @Getter
-@NoArgsConstructor
 public class HyuResponseDto {
-    private Long id;
-    private String content;
-    private LocalDateTime createdDateTime;
+    @ApiModelProperty(notes = "휴 아이디", dataType = "Long", example = "1")
+    private final Long hyuId;
 
-    private Long uid;
-    private String nickname; // 필요 없으면 제거
+    @ApiModelProperty(notes = "휴 작성 회원 아이디", dataType = "Long", example = "1")
+    private final Long userId;
 
-    public HyuResponseDto(Hyu hyu){
-        this.id=hyu.getId();
-        this.content=hyu.getContent();
-        this.createdDateTime=hyu.getCreatedDateTime();
-        this.uid=hyu.getUser().getId();
-        this.nickname=hyu.getUser().getNickname(); // 필요 없으면 제거
+    @ApiModelProperty(notes = "휴 내용", dataType = "String", example = "내용")
+    private final String content;
+
+    @ApiModelProperty(notes = "생성 날짜", dataType = "LocalDateTime", example = "20XX-11-XXT11:44:30.327959")
+    private final LocalDateTime createdDateTime;
+
+    public HyuResponseDto(Hyu hyu) {
+        this.hyuId = hyu.getId();
+        this.userId = hyu.getUser().getId();
+        this.content = hyu.getContent();
+        this.createdDateTime = hyu.getCreatedDateTime();
     }
 }

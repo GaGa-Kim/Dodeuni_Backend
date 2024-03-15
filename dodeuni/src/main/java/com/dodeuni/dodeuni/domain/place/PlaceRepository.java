@@ -1,12 +1,13 @@
 package com.dodeuni.dodeuni.domain.place;
 
 import com.dodeuni.dodeuni.web.dto.place.PlaceListResponseDto;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface PlaceRepository extends JpaRepository<Place, Long> {
     @Query("select new com.dodeuni.dodeuni.web.dto.place.PlaceListResponseDto(p.id, p.name, p.category, p.address, p.contact," +
             "p.x, p.y, p.createdDateTime, p.modifiedDateTime, u.id, u.nickname," +
@@ -20,5 +21,6 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
             "+ sin(radians(:y)) * sin(radians(p.y)))) <= 1.5 " +
             "group by r.place having r.place is not null order by distance desc")
     List<PlaceListResponseDto> getPlaceByLocationAndKeyword(@Param("x") double x, @Param("y") double y, @Param("keyword") String keyword);
+
     Place findByNameAndAddressAndXAndY(String name, String address, double x, double y);
 }

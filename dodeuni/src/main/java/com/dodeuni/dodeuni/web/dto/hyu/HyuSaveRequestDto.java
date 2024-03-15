@@ -1,24 +1,28 @@
 package com.dodeuni.dodeuni.web.dto.hyu;
 
 import com.dodeuni.dodeuni.domain.hyu.Hyu;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HyuSaveRequestDto {
+    @ApiModelProperty(notes = "휴 작성 회원 아이디", dataType = "Long", example = "1")
+    private Long userId;
 
+    @ApiModelProperty(notes = "휴 내용", dataType = "String", example = "내용")
     private String content;
-    private Long uid;
 
     @Builder
-    public HyuSaveRequestDto(String content, Long uid){
-        this.content=content;
-        this.uid=uid;
+    public HyuSaveRequestDto(Long userId, String content) {
+        this.userId = userId;
+        this.content = content;
     }
 
-    public Hyu toEntity(){
+    public Hyu toEntity() {
         return Hyu.builder()
                 .content(content)
                 .build();

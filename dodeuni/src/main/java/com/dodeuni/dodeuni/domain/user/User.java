@@ -1,86 +1,72 @@
 package com.dodeuni.dodeuni.domain.user;
 
-import com.dodeuni.dodeuni.domain.comment.Comment;
 import com.dodeuni.dodeuni.domain.community.Community;
-import com.dodeuni.dodeuni.domain.hyu.Hyu;
 import com.dodeuni.dodeuni.domain.place.Place;
 import com.dodeuni.dodeuni.domain.place.PlaceReview;
+import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "User_Id")
+    @Column(name = "UserId")
+    @ApiModelProperty(notes = "회원 아이디", dataType = "Long", example = "1")
     private Long id;
 
     @Column(length = 100, nullable = false)
+    @ApiModelProperty(notes = "회원 이메일", dataType = "String", example = "dodeuni@gmail.com")
     private String email;
 
     @Column(length = 100, nullable = false)
+    @ApiModelProperty(notes = "회원 닉네임", dataType = "String", example = "도드니")
     private String nickname;
 
+    @ApiModelProperty(notes = "기기-사용자 별 fcm 토큰", dataType = "String", example = "A12D34")
     private String fcmToken;
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Community> communityList = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @ApiModelProperty(notes = "회원 권한", dataType = "Role", example = "일반 사용자")
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Hyu> hyuList = new ArrayList<>();
+    private final List<Community> communityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> commentList = new ArrayList<>();
+    private final List<Place> placeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Place> placeList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PlaceReview> placeReviewList = new ArrayList<>();
+    private final List<PlaceReview> placeReviewList = new ArrayList<>();
 
     @Builder
     public User(Long id, String email, String nickname) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
+        this.role = Role.USER;
     }
 
-    public User updateProfile(String newNickname) {
+    public void updateProfile(String newNickname) {
         this.nickname = newNickname;
-        return this;
     }
 
-    public User updateFcmToken(String fcmToken) {
+    public void updateFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
-        return this;
-    }
-
-    public void addCommunityList(Community community) {
-        this.communityList.add(community);
-        if(community.getUserId() != this) {
-            community.setUser(this);
-        }
-    }
-
-    public void addHyuList(Hyu hyu){
-        this.hyuList.add(hyu);
-        if(hyu.getUser() != this){
-            hyu.setUser(this);
-        }
-    }
-
-    public void addCommentList(Comment comment){
-        this.commentList.add(comment);
-        if(comment.getUser() != this){
-            comment.setUser(this);
-        }
     }
 }

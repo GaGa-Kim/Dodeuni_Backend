@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 import com.dodeuni.dodeuni.domain.user.User;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,14 @@ public class PlaceReviewTest {
     public static final String PLACE_REVIEW_CONTENT = "내용";
 
     public static PlaceReview testPlaceReview() {
-        return PlaceReview.builder()
+        PlaceReview placeReview = PlaceReview.builder()
                 .id(PLACE_REVIEW_ID)
                 .title(PLACE_REVIEW_TITLE)
                 .content(PLACE_REVIEW_CONTENT)
                 .build();
+        placeReview.setCreatedDateTime(LocalDateTime.now());
+        placeReview.setModifiedDateTime(LocalDateTime.now());
+        return placeReview;
     }
 
     private PlaceReview placeReview;

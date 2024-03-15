@@ -2,6 +2,9 @@ package com.dodeuni.dodeuni.web.dto.place;
 
 import com.dodeuni.dodeuni.domain.place.Place;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,24 +14,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceSaveRequestDto {
     @ApiModelProperty(notes = "회원 아이디", dataType = "Long", example = "1")
+    @NotNull
     private Long userId;
 
     @ApiModelProperty(notes = "추천 장소 이름", dataType = "String", example = "이름")
+    @NotEmpty
     private String name;
 
     @ApiModelProperty(notes = "추천 장소 카테고리", dataType = "String", example = "사용자 추천")
+    @NotEmpty
     private String category;
 
     @ApiModelProperty(notes = "추천 장소 주소", dataType = "String", example = "주소")
+    @NotEmpty
     private String address;
 
     @ApiModelProperty(notes = "추천 장소 연락처", dataType = "String", example = "연락처")
     private String contact;
 
     @ApiModelProperty(notes = "추천 장소 경도", dataType = "double", example = "126.96471647833378")
+    @Min(0)
     private double x;
 
     @ApiModelProperty(notes = "추천 장소 위도", dataType = "double", example = "37.54710883987478")
+    @Min(0)
     private double y;
 
     @Builder

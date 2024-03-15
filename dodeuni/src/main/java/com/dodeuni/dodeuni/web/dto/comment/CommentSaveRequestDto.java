@@ -2,6 +2,8 @@ package com.dodeuni.dodeuni.web.dto.comment;
 
 import com.dodeuni.dodeuni.domain.comment.Comment;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,15 +13,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentSaveRequestDto {
     @ApiModelProperty(notes = "댓글 작성 회원 아이디", dataType = "Long", example = "1")
+    @NotNull
     private Long userId;
 
     @ApiModelProperty(notes = "커뮤니티 게시글 아이디", dataType = "Long", example = "1")
+    @NotNull
     private Long communityId;
 
     @ApiModelProperty(notes = "댓글 내용", dataType = "String", example = "내용")
+    @NotEmpty
     private String content;
 
     @ApiModelProperty(notes = "댓글 계층 (댓글일 경우 0, 답댓글일 경우 1)", dataType = "Long", example = "1")
+    @NotNull
     private Long step;
 
     @ApiModelProperty(notes = "부모 댓글 아이디 ", dataType = "Long", example = "1")

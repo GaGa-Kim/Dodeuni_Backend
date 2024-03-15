@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 import com.dodeuni.dodeuni.domain.user.User;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class PlaceTest {
     public static final double PLACE_Y = 1;
 
     public static Place testPlace() {
-        return Place.builder()
+        Place place = Place.builder()
                 .id(PLACE_ID)
                 .name(PLACE_NAME)
                 .category(PLACE_CATEGORY)
@@ -28,6 +29,9 @@ public class PlaceTest {
                 .x(PLACE_X)
                 .y(PLACE_Y)
                 .build();
+        place.setCreatedDateTime(LocalDateTime.now());
+        place.setModifiedDateTime(LocalDateTime.now());
+        return place;
     }
 
     private Place place;

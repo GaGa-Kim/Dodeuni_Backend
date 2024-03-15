@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 
 import com.dodeuni.dodeuni.domain.community.Community;
 import com.dodeuni.dodeuni.domain.user.User;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,12 +19,15 @@ public class CommentTest {
     public static final Long COMMENT_PID = null;
 
     public static Comment testComment() {
-        return Comment.builder()
+        Comment comment = Comment.builder()
                 .id(COMMENT_ID)
                 .content(COMMENT_CONTENT)
                 .step(COMMENT_STEP)
                 .pid(COMMENT_PID)
                 .build();
+        comment.setCreatedDateTime(LocalDateTime.now());
+        comment.setModifiedDateTime(LocalDateTime.now());
+        return comment;
     }
 
     private Comment comment;

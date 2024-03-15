@@ -1,5 +1,6 @@
 package com.dodeuni.dodeuni.domain.community;
 
+import com.dodeuni.dodeuni.except.UnexpectedValueException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -26,6 +27,10 @@ public enum Sub {
     }
 
     public static Sub findSubName(String subName) {
-        return SUB_MAIN_MAP.get(subName);
+        Sub foundSub = SUB_MAIN_MAP.get(subName);
+        if (foundSub == null) {
+            throw new UnexpectedValueException();
+        }
+        return foundSub;
     }
 }

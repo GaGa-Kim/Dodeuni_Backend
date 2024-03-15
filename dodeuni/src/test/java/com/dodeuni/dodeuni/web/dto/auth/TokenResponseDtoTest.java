@@ -1,4 +1,4 @@
-package com.dodeuni.dodeuni.web.dto.user;
+package com.dodeuni.dodeuni.web.dto.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

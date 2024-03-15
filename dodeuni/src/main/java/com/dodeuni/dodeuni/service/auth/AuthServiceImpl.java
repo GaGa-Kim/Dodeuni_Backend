@@ -3,8 +3,8 @@ package com.dodeuni.dodeuni.service.auth;
 import com.dodeuni.dodeuni.domain.user.User;
 import com.dodeuni.dodeuni.domain.user.UserRepository;
 import com.dodeuni.dodeuni.jwt.JwtTokenProvider;
+import com.dodeuni.dodeuni.web.dto.auth.TokenResponseDto;
 import com.dodeuni.dodeuni.web.dto.auth.UserSaveRequestDto;
-import com.dodeuni.dodeuni.web.dto.user.TokenResponseDto;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private TokenResponseDto issueToken(User user, HttpServletResponse response) {
-        String token = jwtTokenProvider.generateToken(user.getEmail());
+        String token = jwtTokenProvider.generateToken(user);
         jwtTokenProvider.setHeaderAccessToken(response, token);
         return new TokenResponseDto(user, token);
     }

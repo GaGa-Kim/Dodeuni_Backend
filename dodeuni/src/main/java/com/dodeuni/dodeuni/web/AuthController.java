@@ -1,8 +1,8 @@
 package com.dodeuni.dodeuni.web;
 
 import com.dodeuni.dodeuni.service.auth.AuthService;
+import com.dodeuni.dodeuni.web.dto.auth.TokenResponseDto;
 import com.dodeuni.dodeuni.web.dto.auth.UserSaveRequestDto;
-import com.dodeuni.dodeuni.web.dto.user.TokenResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletResponse;

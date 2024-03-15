@@ -30,7 +30,7 @@ public class CommentResponseDto {
 
     @ApiModelProperty(notes = "생성 날짜", dataType = "LocalDateTime", example = "20XX-11-XXT11:44:30.327959")
     private final LocalDateTime createdDateTime;
-    
+
     @ApiModelProperty(notes = "수정 날짜", dataType = "LocalDateTime", example = "20XX-XX-XXT11:44:30.327959")
     private final LocalDateTime modifiedDateTime;
 

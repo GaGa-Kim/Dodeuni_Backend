@@ -1,6 +1,6 @@
 package com.dodeuni.dodeuni.service.auth;
 
-import static com.dodeuni.dodeuni.web.dto.user.TokenResponseDtoTest.TOKEN;
+import static com.dodeuni.dodeuni.web.dto.auth.TokenResponseDtoTest.TOKEN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,9 +14,9 @@ import com.dodeuni.dodeuni.domain.user.User;
 import com.dodeuni.dodeuni.domain.user.UserRepository;
 import com.dodeuni.dodeuni.domain.user.UserTest;
 import com.dodeuni.dodeuni.jwt.JwtTokenProvider;
+import com.dodeuni.dodeuni.web.dto.auth.TokenResponseDto;
 import com.dodeuni.dodeuni.web.dto.auth.UserSaveRequestDto;
 import com.dodeuni.dodeuni.web.dto.auth.UserSaveRequestDtoTest;
-import com.dodeuni.dodeuni.web.dto.user.TokenResponseDto;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,7 +47,7 @@ class AuthServiceImplTest {
     void testRegister() {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(jwtTokenProvider.generateToken(anyString())).thenReturn(TOKEN);
+        when(jwtTokenProvider.generateToken(any())).thenReturn(TOKEN);
         doNothing().when(jwtTokenProvider).setHeaderAccessToken(any(), anyString());
 
         UserSaveRequestDto userSaveRequestDto = UserSaveRequestDtoTest.testUserSaveRequestDto(user);
@@ -60,7 +60,7 @@ class AuthServiceImplTest {
 
         verify(userRepository).existsByEmail(anyString());
         verify(userRepository).save(any(User.class));
-        verify(jwtTokenProvider).generateToken(anyString());
+        verify(jwtTokenProvider).generateToken(any());
         verify(jwtTokenProvider).setHeaderAccessToken(any(), anyString());
     }
 
@@ -69,7 +69,7 @@ class AuthServiceImplTest {
     void testLogin() {
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
         when(userRepository.findByEmail(anyString())).thenReturn(user);
-        when(jwtTokenProvider.generateToken(anyString())).thenReturn(TOKEN);
+        when(jwtTokenProvider.generateToken(any())).thenReturn(TOKEN);
         doNothing().when(jwtTokenProvider).setHeaderAccessToken(any(), anyString());
 
         UserSaveRequestDto userSaveRequestDto = UserSaveRequestDtoTest.testUserSaveRequestDto(user);
@@ -82,7 +82,7 @@ class AuthServiceImplTest {
 
         verify(userRepository).existsByEmail(anyString());
         verify(userRepository).findByEmail(anyString());
-        verify(jwtTokenProvider).generateToken(anyString());
+        verify(jwtTokenProvider).generateToken(any());
         verify(jwtTokenProvider).setHeaderAccessToken(any(), anyString());
     }
 }

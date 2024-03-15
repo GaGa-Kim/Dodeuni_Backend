@@ -1,7 +1,7 @@
 package com.dodeuni.dodeuni.service.auth;
 
+import com.dodeuni.dodeuni.web.dto.auth.TokenResponseDto;
 import com.dodeuni.dodeuni.web.dto.auth.UserSaveRequestDto;
-import com.dodeuni.dodeuni.web.dto.user.TokenResponseDto;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,29 +1,35 @@
 package com.dodeuni.dodeuni.jwt;
 
 import com.dodeuni.dodeuni.config.GlobalConfig;
+import com.dodeuni.dodeuni.domain.user.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
-import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class JwtTokenProvider {
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
-    private final GlobalConfig config;
+    private final String secretKey;
+    private final int expirationTime;
 
-    public String generateToken(String email) {
+    public JwtTokenProvider(GlobalConfig config) {
+        this.secretKey = config.getSecretKey();
+        this.expirationTime = config.getExpirationTime() * 1000;
+    }
+
+    public String generateToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+        claims.put("roles", user.getRole());
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(new HashMap<>())
-                .setSubject(email)
+                .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + config.getExpirationTime()))
-                .signWith(SignatureAlgorithm.HS512, config.getSecretKey())
+                .setExpiration(new Date(now.getTime() + expirationTime))
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 

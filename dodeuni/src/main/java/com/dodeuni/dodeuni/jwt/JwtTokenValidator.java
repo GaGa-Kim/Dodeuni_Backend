@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,13 +19,16 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtTokenValidator {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final int PREFIX_INDEX = 7;
 
-    private final GlobalConfig config;
+    private final String secretKey;
+
+    public JwtTokenValidator(GlobalConfig config) {
+        this.secretKey = config.getSecretKey();
+    }
 
     public String resolveAccessToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
@@ -37,6 +39,7 @@ public class JwtTokenValidator {
     }
 
     public boolean validateToken(String token) {
+        System.out.println(secretKey);
         try {
             return !isTokenExpired(token);
         } catch (SecurityException | MalformedJwtException e) {
@@ -56,11 +59,11 @@ public class JwtTokenValidator {
     }
 
     private String getUserEmail(String token) {
-        return Jwts.parser().setSigningKey(config.getJwtSecret()).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
     private List<GrantedAuthority> getUserRole(String token) {
-        Claims claims = Jwts.parser().setSigningKey(config.getJwtSecret()).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(claims.get("roles", String.class)));
         return roles;
@@ -72,6 +75,6 @@ public class JwtTokenValidator {
     }
 
     private Date getExpirationDateFromToken(String token) {
-        return Jwts.parser().setSigningKey(config.getJwtSecret()).parseClaimsJws(token).getBody().getExpiration();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
     }
 }

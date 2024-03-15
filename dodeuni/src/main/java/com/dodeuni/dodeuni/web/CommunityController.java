@@ -19,10 +19,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +38,7 @@ public class CommunityController {
 
     @PostMapping
     @ApiOperation(notes = "커뮤니티 게시글을 저장", value = "커뮤니티 게시글 저장 API")
-    public ResponseEntity<CommunityResponseDto> save(@RequestBody @Valid CommunitySaveRequestDto requestDto) {
+    public ResponseEntity<CommunityResponseDto> save(@ModelAttribute @Valid CommunitySaveRequestDto requestDto) {
         return ResponseEntity.ok().body(communityService.saveCommunity(requestDto));
     }
 
@@ -62,7 +62,7 @@ public class CommunityController {
 
     @PutMapping
     @ApiOperation(notes = "커뮤니티 게시글을 수정", value = "커뮤니티 게시글 수정 API")
-    public ResponseEntity<CommunityResponseDto> update(@RequestBody @Valid CommunityUpdateRequestDto requestDto) {
+    public ResponseEntity<CommunityResponseDto> update(@ModelAttribute @Valid CommunityUpdateRequestDto requestDto) {
         return ResponseEntity.ok().body(communityService.updateCommunity(requestDto));
     }
 

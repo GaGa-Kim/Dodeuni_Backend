@@ -39,7 +39,6 @@ public class JwtTokenValidator {
     }
 
     public boolean validateToken(String token) {
-        System.out.println(secretKey);
         try {
             return !isTokenExpired(token);
         } catch (SecurityException | MalformedJwtException e) {

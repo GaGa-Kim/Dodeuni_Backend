@@ -33,7 +33,6 @@ public class PlaceController {
 
     @PostMapping
     @ApiOperation(notes = "추천 장소를 저장", value = "추천 장소 저장 API")
-    @ApiImplicitParam(name = "requestDto", value = "추천 장소 저장 정보를 담은 DTO")
     public ResponseEntity<PlaceResponseDto> save(@RequestBody @Valid PlaceSaveRequestDto requestDto) {
         return ResponseEntity.ok().body(placeService.savePlace(requestDto));
     }

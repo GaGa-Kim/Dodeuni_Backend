@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 
 public class PhotoTest {
     public static final Long PHOTO_ID = 1L;
-    public static final String PHOTO_ORIG_NAME = "사진 원본 이름";
-    public static final String PHOTO_NAME = "변환된 사진 이름";
-    public static final String PHOTO_URL = "www.google.com";
+    public static final String PHOTO_ORIG_NAME = "사진 원본 이름.jpg";
+    public static final String PHOTO_NAME = "변환된 사진 이름.jpg";
+    public static final String PHOTO_URL = "dodeuni.jpg";
 
     public static Photo testPhoto() {
         return Photo.builder()

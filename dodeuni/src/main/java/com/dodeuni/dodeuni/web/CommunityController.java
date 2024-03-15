@@ -38,7 +38,6 @@ public class CommunityController {
 
     @PostMapping
     @ApiOperation(notes = "커뮤니티 게시글을 저장", value = "커뮤니티 게시글 저장 API")
-    @ApiImplicitParam(name = "requestDto", value = "커뮤니티 게시글 저장 정보를 담은 DTO")
     public ResponseEntity<CommunityResponseDto> save(@RequestBody @Valid CommunitySaveRequestDto requestDto) {
         return ResponseEntity.ok().body(communityService.saveCommunity(requestDto));
     }
@@ -63,7 +62,6 @@ public class CommunityController {
 
     @PutMapping
     @ApiOperation(notes = "커뮤니티 게시글을 수정", value = "커뮤니티 게시글 수정 API")
-    @ApiImplicitParam(name = "requestDto", value = "댓글 수정 정보를 담은 DTO")
     public ResponseEntity<CommunityResponseDto> update(@RequestBody @Valid CommunityUpdateRequestDto requestDto) {
         return ResponseEntity.ok().body(communityService.updateCommunity(requestDto));
     }

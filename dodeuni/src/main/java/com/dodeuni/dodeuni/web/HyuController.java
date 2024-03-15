@@ -4,7 +4,6 @@ import com.dodeuni.dodeuni.service.hyu.HyuService;
 import com.dodeuni.dodeuni.web.dto.hyu.HyuResponseDto;
 import com.dodeuni.dodeuni.web.dto.hyu.HyuSaveRequestDto;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
@@ -29,7 +28,6 @@ public class HyuController {
 
     @PostMapping
     @ApiOperation(notes = "휴 게시글을 저장", value = "휴 게시글 저장 API")
-    @ApiImplicitParam(name = "requestDto", value = "댓글 저장 정보를 담은 DTO")
     public ResponseEntity<List<HyuResponseDto>> save(@RequestBody @Valid HyuSaveRequestDto requestDto) {
         return ResponseEntity.ok().body(hyuService.saveHyu(requestDto));
     }

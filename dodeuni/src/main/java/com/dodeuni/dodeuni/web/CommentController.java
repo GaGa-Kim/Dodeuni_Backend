@@ -35,7 +35,6 @@ public class CommentController {
 
     @PostMapping
     @ApiOperation(notes = "커뮤니티 게시글의 댓글을 저장", value = "댓글 저장 API")
-    @ApiImplicitParam(name = "requestDto", value = "댓글 저장 정보를 담은 DTO")
     public ResponseEntity<List<CommentResponseDto>> save(@RequestBody @Valid CommentSaveRequestDto requestDto) {
         return ResponseEntity.ok().body(commentService.saveComment(requestDto));
     }
@@ -49,7 +48,6 @@ public class CommentController {
 
     @PutMapping
     @ApiOperation(notes = "커뮤니티 게시글의 댓글을 수정", value = "댓글 수정 API")
-    @ApiImplicitParam(name = "requestDto", value = "댓글 수정 정보를 담은 DTO")
     public ResponseEntity<List<CommentResponseDto>> update(@RequestBody @Valid CommentUpdateRequestDto requestDto) {
         return ResponseEntity.ok().body(commentService.updateComment(requestDto));
     }

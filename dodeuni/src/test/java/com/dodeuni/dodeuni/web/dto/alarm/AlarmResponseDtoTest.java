@@ -32,7 +32,7 @@ public class AlarmResponseDtoTest {
         AlarmResponseDto alarmResponseDto = testAlarmResponseDto(comment);
 
         assertNotNull(alarmResponseDto);
-        assertEquals(comment.getId(), alarmResponseDto.getId());
+        assertEquals(comment.getId(), alarmResponseDto.getCommunityId());
         assertEquals(comment.getCommunity().getMain().getMainName(), alarmResponseDto.getMain());
         assertEquals(comment.getCommunity().getSub().getSubName(), alarmResponseDto.getSub());
         assertEquals("0초 전", alarmResponseDto.getCreatedDateTime());

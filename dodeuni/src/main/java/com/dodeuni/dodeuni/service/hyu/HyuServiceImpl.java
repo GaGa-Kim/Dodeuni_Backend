@@ -3,7 +3,7 @@ package com.dodeuni.dodeuni.service.hyu;
 import com.dodeuni.dodeuni.domain.hyu.Hyu;
 import com.dodeuni.dodeuni.domain.hyu.HyuRepository;
 import com.dodeuni.dodeuni.domain.user.User;
-import com.dodeuni.dodeuni.service.user.UserServiceImpl;
+import com.dodeuni.dodeuni.service.user.UserService;
 import com.dodeuni.dodeuni.web.dto.hyu.HyuResponseDto;
 import com.dodeuni.dodeuni.web.dto.hyu.HyuSaveRequestDto;
 import java.util.List;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class HyuServiceImpl implements HyuService {
     private final HyuRepository hyuRepository;
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     @Override
     public List<HyuResponseDto> saveHyu(HyuSaveRequestDto requestDto) {
-        User user = userServiceImpl.findByUserId(requestDto.getUserId());
+        User user = userService.findByUserId(requestDto.getUserId());
         Hyu hyu = requestDto.toEntity();
         hyu.setUser(user);
         hyuRepository.save(hyu);

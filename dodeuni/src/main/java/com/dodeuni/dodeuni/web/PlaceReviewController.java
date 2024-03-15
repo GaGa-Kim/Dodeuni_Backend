@@ -34,7 +34,6 @@ public class PlaceReviewController {
 
     @PostMapping
     @ApiOperation(notes = "추천 장소에 리뷰를 저장", value = "추천 장소 후기 저장 API")
-    @ApiImplicitParam(name = "requestDto", value = "추천 장소 후기 저장 정보를 담은 DTO")
     public ResponseEntity<PlaceReviewResponseDto> save(@RequestBody @Valid PlaceReviewSaveRequestDto requestDto) {
         return ResponseEntity.ok().body(placeReviewService.saveReview(requestDto));
     }

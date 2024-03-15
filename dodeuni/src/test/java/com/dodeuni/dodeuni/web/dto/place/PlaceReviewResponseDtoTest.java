@@ -36,9 +36,10 @@ public class PlaceReviewResponseDtoTest {
         PlaceReviewResponseDto placeReviewResponseDto = testPlaceReviewResponseDto(placeReview);
 
         assertNotNull(placeReviewResponseDto);
-        assertEquals(placeReview.getId(), placeReviewResponseDto.getPlaceId());
+        assertEquals(placeReview.getId(), placeReviewResponseDto.getPlaceReviewId());
         assertEquals(placeReview.getUser().getId(), placeReviewResponseDto.getUserId());
         assertEquals(placeReview.getUser().getNickname(), placeReviewResponseDto.getNickname());
+        assertEquals(placeReview.getPlace().getId(), placeReviewResponseDto.getPlaceId());
         assertEquals(placeReview.getTitle(), placeReviewResponseDto.getTitle());
         assertEquals(placeReview.getContent(), placeReviewResponseDto.getContent());
         assertEquals(placeReview.getCreatedDateTime(), placeReviewResponseDto.getCreatedDateTime());

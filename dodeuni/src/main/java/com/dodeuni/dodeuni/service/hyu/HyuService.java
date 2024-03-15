@@ -24,7 +24,7 @@ public interface HyuService {
     List<HyuResponseDto> getHyuList();
 
     /**
-     * 매일 자정 휴 전체 게시글 테이블을 전체 삭제한다.
+     * 매일 자정 휴 게시글 테이블을 전체 삭제한다.
      */
     void deleteHyuAll();
 }

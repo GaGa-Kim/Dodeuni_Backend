@@ -10,7 +10,7 @@ public class AlarmResponseDto {
     private static final String COMMENT_ALARM_MESSAGE = "님이 회원님의 게시글에 댓글을 달았습니다.";
 
     @ApiModelProperty(notes = "커뮤니티 게시글 아이디", dataType = "Long", example = "1")
-    private final Long id;
+    private final Long communityId;
 
     @ApiModelProperty(notes = "커뮤니티 게시글 카테고리 대분류", dataType = "String", example = "정보")
     private final String main;
@@ -25,7 +25,7 @@ public class AlarmResponseDto {
     private final String createdDateTime;
 
     public AlarmResponseDto(Comment comment) {
-        this.id = comment.getCommunity().getId();
+        this.communityId = comment.getCommunity().getId();
         this.main = comment.getCommunity().getMain().getMainName();
         this.sub = comment.getCommunity().getSub().getSubName();
         this.createdDateTime = Time.calculateTime(java.sql.Timestamp.valueOf(comment.getCreatedDateTime()));
